@@ -23,7 +23,7 @@ async function getArticleEntries() {
 }
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT;
 
 app.get("/", async (req, res) => {
   const pdfDocuments = await client.getEntries({
