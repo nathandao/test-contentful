@@ -26,15 +26,10 @@ const app = express();
 const port = process.env.PORT;
 
 app.get("/", async (req, res) => {
-  const pdfDocuments = await client.getEntries({
-    content_type: "pdfDocument",
+  const publicArticles = await client.getEntries({
+    content_type: "publicArticle",
   });
-  const items = pdfDocuments.items.map((item) => ({
-    url: _.get(item, "fields.file.fields.file.url"),
-    title: _.get(item, "fields.title"),
-  }));
-  res.setHeader("Content-Type", "application/json");
-  res.send(items);
+  res.send(toHTMLString(publicArticles.items[0].fields.content));
 });
 
 app.get("/files", async (req, res) => {
