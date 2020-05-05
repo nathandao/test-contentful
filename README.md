@@ -20,3 +20,4 @@ npm start
 
 - /files: List all the published PDFDocuments content type
 - /preview-files: List all the published PDFDocuments content type
+- /raw-files: What contentful API returned for the published PDF documents

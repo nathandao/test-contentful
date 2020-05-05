@@ -56,6 +56,14 @@ app.get("/preview-files", async (req, res) => {
   res.send(items);
 });
 
+app.get("/raw-files", async (req, res) => {
+  const pdfDocuments = await client.getEntries({
+    content_type: "pdfDocument",
+  });
+  res.setHeader("Content-Type", "application/json");
+  res.send(pdfDocuments);
+});
+
 app.listen(port, () => {
   console.log(`Server started at localhost: ${port}`);
 });
