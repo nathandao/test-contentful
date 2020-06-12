@@ -5,65 +5,80 @@ const contentful = require("contentful");
 const _ = require("lodash");
 const richTextTypes = require("@contentful/rich-text-types");
 const toHTMLString = require("@contentful/rich-text-html-renderer")
-  .documentToHtmlString;
+    .documentToHtmlString;
 
 const client = contentful.createClient({
-  space: process.env.CONTENTFUL_SPACE_ID,
-  accessToken: process.env.CONTENTFUL_TOKEN,
+    space: process.env.CONTENTFUL_SPACE_ID,
+    accessToken: process.env.CONTENTFUL_TOKEN,
 });
 
 const previewClient = contentful.createClient({
-  space: process.env.CONTENTFUL_SPACE_ID,
-  accessToken: process.env.CONTENTFUL_PREVIEW_TOKEN,
-  host: "preview.contentful.com",
+    space: process.env.CONTENTFUL_SPACE_ID,
+    accessToken: process.env.CONTENTFUL_PREVIEW_TOKEN,
+    host: "preview.contentful.com",
 });
 
 async function getArticleEntries() {
-  return publicArticles;
+    return publicArticles;
 }
 
 const app = express();
 const port = process.env.PORT;
 
 app.get("/", async (req, res) => {
-  const publicArticles = await client.getEntries({
-    content_type: "publicArticle",
-  });
-  res.send(toHTMLString(publicArticles.items[0].fields.content));
+    const publicArticles = await client.getEntries({
+        content_type: "publicArticle",
+    });
+    res.send(toHTMLString(publicArticles.items[0].fields.content));
 });
 
 app.get("/files", async (req, res) => {
-  const pdfDocuments = await client.getEntries({
-    content_type: "pdfDocument",
-  });
-  const items = pdfDocuments.items.map((item) => ({
-    url: _.get(item, "fields.file.fields.file.url"),
-    title: _.get(item, "fields.title"),
-  }));
-  res.setHeader("Content-Type", "application/json");
-  res.send(items);
+    const pdfDocuments = await client.getEntries({
+        content_type: "pdfDocument",
+    });
+    const items = pdfDocuments.items.map((item) => ({
+        url: _.get(item, "fields.file.fields.file.url"),
+        title: _.get(item, "fields.title"),
+    }));
+    res.setHeader("Content-Type", "application/json");
+    res.send(items);
+});
+
+app.get("/testimonials", async (req, res) => {
+    const customerTestimonials = await client.getEntries({
+        content_type: "customerTestimonial",
+    });
+    const items = customerTestimonials.items.map((item) => ({
+        name: _.get(item, "fields.customerName"),
+        company: _.get(item, "fields.customerCompany"),
+        testimonialText: _.get(item, "fields.testimonialText"),
+        packageUsed: _.get(item, "fields.packageUsed"),
+        testimonialCategory: _.get(item, "fields.testimonialCategory"),
+    }));
+    res.setHeader("Content-Type", "application/json");
+    res.send(items);
 });
 
 app.get("/preview-files", async (req, res) => {
-  const pdfDocuments = await previewClient.getEntries({
-    content_type: "pdfDocument",
-  });
-  const items = pdfDocuments.items.map((item) => ({
-    url: _.get(item, "fields.file.fields.file.url"),
-    title: _.get(item, "fields.title"),
-  }));
-  res.setHeader("Content-Type", "application/json");
-  res.send(items);
+    const pdfDocuments = await previewClient.getEntries({
+        content_type: "pdfDocument",
+    });
+    const items = pdfDocuments.items.map((item) => ({
+        url: _.get(item, "fields.file.fields.file.url"),
+        title: _.get(item, "fields.title"),
+    }));
+    res.setHeader("Content-Type", "application/json");
+    res.send(items);
 });
 
 app.get("/raw-files", async (req, res) => {
-  const pdfDocuments = await client.getEntries({
-    content_type: "pdfDocument",
-  });
-  res.setHeader("Content-Type", "application/json");
-  res.send(pdfDocuments);
+    const pdfDocuments = await client.getEntries({
+        content_type: "pdfDocument",
+    });
+    res.setHeader("Content-Type", "application/json");
+    res.send(pdfDocuments);
 });
 
 app.listen(port, () => {
-  console.log(`Server started at localhost: ${port}`);
+    console.log(`Server started at localhost: ${port}`);
 });
