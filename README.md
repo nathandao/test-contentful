@@ -44,3 +44,5 @@ npm run netlify functions:create function-name
 Currently, the deployment is created via configuring Netlify to listen to our github changes. Pushes to master branch will be deployed to production.
 
 Environment Contentful variables are set within Netlify dashboard in `Settings > Build & Deploy > Environment`
+
+For every PR created, Netlify would also create a separate environment for that PR, which can be accessed via Netlify dashboard, under the Deploys section :)
