@@ -12,6 +12,13 @@ Install dependencies
 npm i
 ```
 
+Make sure you're logged in to Netlify
+
+```bash
+npm run netlify login
+# This will open the Netlify authentication page in your browser, where you can login and authorize the application from there.
+```
+
 Start the local netlify development environment
 
 ```bash
