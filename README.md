@@ -19,7 +19,7 @@ npm run netlify login
 # This will open the Netlify authentication page in your browser, where you can login and authorize the application from there.
 ```
 
-Start the local netlify development environment
+Start the local netlify development environment. If you're logged in to Netlify, and have access to the Netlify application, the environment variables will be fetched automatically.
 
 ```bash
 npm start
